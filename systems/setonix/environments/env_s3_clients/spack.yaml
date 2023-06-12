@@ -6,21 +6,21 @@
 spack:
   definitions:
   - s3-python-set:
-    - awscli@1.16.308
-    - py-boto3@1.18.12
+    - awscli@1.27.84
+    - py-boto3@1.26.26
   - s3-go-set:
-    - rclone@1.58.1
-    - rclone@1.59.2
+    - rclone@1.62.2
+    - rclone@1.59.1
     
     # later versions of minio require further updates and also 
     # a recipe for a new go package it seems 
-    - miniocli@2022-02-02T02-03-24Z
-    - miniocli@2022-10-29T10-09-23Z
+    - miniocli@2023-05-26
+    - miniocli@2022-05-04
   # add package specs to the `specs` list
   specs:
   - matrix:
     - [$s3-python-set]
-    - [^python@3.9.15 +optimizations+zlib]
+    - [^python@3.10.10 +optimizations+zlib]
     - ['%gcc@12.1.0']
     - [target=zen2, target=zen3]
   - matrix:

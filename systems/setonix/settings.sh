@@ -3,7 +3,7 @@ if [ -z ${__PSC_SETTINGS__+x} ]; then # include guard
 __PSC_SETTINGS__=1
 
 # EDIT at each rebuild of the software stack
-DATE_TAG="2023.02"
+DATE_TAG="2023.06"
 
 if [ -z ${INSTALL_PREFIX+x} ]; then
     INSTALL_PREFIX="/software/setonix/${DATE_TAG}"
@@ -51,19 +51,19 @@ aocc_version="3.2.0"
 cpu_arch="zen3"
 
 # tool versions
-spack_version="0.19.0" # the prefix "v" is added in setup_spack.sh
-singularity_version="3.8.6-nompi" # has to match the version in the Spack env yaml + nompi tag
-singularity_mpi_version="3.8.6-mpi" # has to match the version in the Spack env yaml + mpi tag
+spack_version="0.20.0" # the prefix "v" is added in setup_spack.sh
+singularity_version="3.8.7-nompi" # has to match the version in the Spack env yaml + nompi tag
+singularity_mpi_version="3.8.7-mpi" # has to match the version in the Spack env yaml + mpi tag
 shpc_version="0.1.2"
 shpc_registry_version="5033baa6570ca8e4881dd3e7900051f84bc9886b"
 
 # python (and py tools) versions
 python_name="python"
-python_version="3.9.15" # has to match the version in the Spack env yaml
-setuptools_version="57.4.0" # has to match the version in the Spack env yaml
-pip_version="22.2.2" # has to match the version in the Spack env yaml
+python_version="3.10.10" # has to match the version in the Spack env yaml
+setuptools_version="63.4.3" # has to match the version in the Spack env yaml
+pip_version="23.0" # has to match the version in the Spack env yaml
 # r major minor version
-r_version_majorminor="4.1"
+r_version_majorminor="4.2.2"
 
 # list of module categories
 module_cat_list="
