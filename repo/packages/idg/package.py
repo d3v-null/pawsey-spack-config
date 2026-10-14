@@ -24,6 +24,9 @@ class Idg(CMakePackage, CudaPackage, ROCmPackage):
     version("0.7", tag="0.7")
     # ASTRON's experimental HIP/ROCm port (Dec 2021, forked from a pre-1.0 snapshot).
     # The branch only exists on ASTRON's own GitLab, not on the gitlab.com mirror.
+    # Status on Setonix (ROCm 6.3.0, MI250X gfx90a), Oct 2026: Generic and Hybrid proxies
+    # build and run; gridding/degridding match the CPU reference, the average-beam test
+    # does not, and the Unified (managed-memory) proxy segfaults in its final FFT.
     version("hip-rocm", branch="llu/hip-rocm", git="https://git.astron.nl/RD/idg.git")
 
     depends_on('boost')
