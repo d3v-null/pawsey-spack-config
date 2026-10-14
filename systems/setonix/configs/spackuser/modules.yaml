@@ -350,6 +350,8 @@ modules:
         idg: 'astro-applications/{name}/{version}'
         everybeam: 'astro-applications/{name}/{version}'
         wcstools: 'astro-applications/{name}/{version}'
+        "wsclean +rocm +mpi": 'astro-applications/{name}/{version}-idg-rocm-mpi'
+        "wsclean +rocm": 'astro-applications/{name}/{version}-idg-rocm'
         "wsclean +mpi ~idg ~everybeam": 'astro-applications/{name}/{version}-mpi'
         "wsclean +mpi +idg ~everybeam": 'astro-applications/{name}/{version}-idg-mpi'
         "wsclean +mpi +idg +everybeam": 'astro-applications/{name}/{version}-idg-everybeam-mpi'

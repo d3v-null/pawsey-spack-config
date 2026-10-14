@@ -6,7 +6,7 @@
 from spack import *
 
 
-class Wsclean(CMakePackage):
+class Wsclean(CMakePackage, ROCmPackage):
     """
      WSClean (w-stacking clean) is a fast generic widefield imager. It uses the w-stacking algorithm
      and can make use of the w-snapshot algorithm. As of Feb 2014, it is 2-12 times faster than CASA's
@@ -31,6 +31,8 @@ class Wsclean(CMakePackage):
     variant('idg', default=False, description='To enable Image Domain Gridder (a fast GPU-enabled gridder)')
     variant('everybeam', default=False, when="@3:", description='To apply primary beams for version >=3')
     variant('mpi', default=False,when="@3:", description='To enable distributed mode')
+    # +rocm (from ROCmPackage) selects ASTRON's experimental HIP/ROCm port of IDG.
+    conflicts('+rocm', when='~idg', msg='wsclean: +rocm only makes sense together with +idg')
 
     depends_on('casacore@3.2.1:')
     depends_on('fftw-api@3')
@@ -38,8 +40,11 @@ class Wsclean(CMakePackage):
     depends_on('gsl@2.6:')
     depends_on('cfitsio@3.48:')
     depends_on('boost@1.80.0: +date_time +filesystem +system +test +program_options')
-    depends_on('idg@0.8.1', when='@3.0 +idg')
-    depends_on('idg@1.0.0', when='@3.1: +idg')
+    depends_on('idg@0.8.1', when='@3.0 +idg ~rocm')
+    depends_on('idg@1.0.0', when='@3.1: +idg ~rocm')
+    depends_on('idg@hip-rocm +rocm', when='+idg +rocm')
+    for _target in ROCmPackage.amdgpu_targets:
+        depends_on(f'idg amdgpu_target={_target}', when=f'+rocm amdgpu_target={_target}')
     depends_on('everybeam@0.2.0', when='@3.0 +everybeam')
     depends_on('everybeam@0.3.1', when='@3.1 +everybeam')
     depends_on('everybeam@0.4.0', when='@3.2 +everybeam')
@@ -65,6 +70,16 @@ class Wsclean(CMakePackage):
                 '#include <cmath>',
                 '#include <cmath>\n#include <algorithm>',
                 mavcc
+            )
+        if self.spec.satisfies('+rocm'):
+            # idg@hip-rocm is a git branch without a release tag, so its idgapi-config-version.cmake
+            # reports an empty version and wsclean's ">= 0.8.1" check fails even though every
+            # BufferSet method wsclean uses is present. Skip the check for the ROCm build.
+            filter_file(
+                'if(${IDGAPI_VERSION} VERSION_LESS "0.8.1")',
+                'if(FALSE)  # version check disabled by spack for idg@hip-rocm (untagged branch)',
+                'CMakeLists.txt',
+                string=True,
             )
 
     @run_before("cmake")

@@ -105,7 +105,7 @@ class Idg(CMakePackage, CudaPackage, ROCmPackage):
             env.set("HIP_PATH", rocm)
             env.set("ROCM_PATH", rocm)
 
-    def setup_run_environment(self, env):
+    def _hip_runtime_env(self, env):
         if self.spec.satisfies("+rocm"):
             # Kernels are compiled at runtime with `hipcc --genco $IDG_HIP_FLAGS ...`;
             # without an offload arch hipcc defaults to gfx906 and the code object will
@@ -114,3 +114,11 @@ class Idg(CMakePackage, CudaPackage, ROCmPackage):
             env.set("IDG_HIP_FLAGS", archs)
             env.set("HIP_PATH", self.spec["hip"].prefix)
             env.set("ROCM_PATH", self.spec["hip"].prefix)
+
+    def setup_run_environment(self, env):
+        self._hip_runtime_env(env)
+
+    def setup_dependent_run_environment(self, env, dependent_spec):
+        # Dependents such as wsclean load idg's GPU kernels at runtime, so their module
+        # must carry IDG_HIP_FLAGS too (project modules on Setonix do not autoload deps).
+        self._hip_runtime_env(env)
