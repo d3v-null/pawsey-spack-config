@@ -44,6 +44,8 @@ class Idg(CMakePackage, CudaPackage, ROCmPackage):
     conflicts("+cuda", when="@hip-rocm", msg="idg@hip-rocm is the ROCm port; use a tagged release for CUDA")
 
     patch("fix_FFT.cpp.patch")
+    # wsclean >= 3.1 needs the stokes_I_only idg-api option (upstream 343e78cd, after the branch point).
+    patch("hip-rocm-stokes-I-only.patch", when="@hip-rocm")
 
     def _hip_clangxx(self):
         """clang++ shipped with ROCm, needed as CMAKE_HIP_COMPILER (hipcc is not accepted by CMake>=3.28)."""
