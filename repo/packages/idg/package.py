@@ -27,6 +27,10 @@ class Idg(CMakePackage, CudaPackage, ROCmPackage):
     # Status on Setonix (ROCm 6.3.0, MI250X gfx90a), Oct 2026: Generic and Hybrid proxies
     # build and run; gridding/degridding match the CPU reference, the average-beam test
     # does not, and the Unified (managed-memory) proxy segfaults in its final FFT.
+    # With wsclean 3.4 (-pol I, -idg-mode hybrid) degridding/predict matches the CPU
+    # proxy to 2e-5, but the gridded (dirty/model) images come out scaled by a constant
+    # 1.387x; the HIP kernels predate upstream's Stokes-I-only (2-correlation) GPU
+    # support (idg 6ecbd77f). Treat GPU gridding output as unverified.
     version("hip-rocm", branch="llu/hip-rocm", git="https://git.astron.nl/RD/idg.git")
 
     depends_on('boost')
